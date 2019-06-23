@@ -1,3 +1,75 @@
+
+#import <substrate.h>
+
+returnType (*old_symbol)(args);
+returnType new_symbol(args){
+
+}
+
+void InitializeMSHookFunction(void){
+	MSImageRef image = MSGetImageByName("/Applications/iOSRETargetApp.app/iOSRETargetApp");
+	void * symbol = MSFindSymbol(image,"symbol");
+	if (symbol){
+		MSHookFunction((void *)symbol,(void *)&new_symbol,(void**)&old_symbol);
+	}else{
+		NSLog(@"Symbol not found!");
+	}
+}
+
+void (*old_ZN8CPPClass11CPPFunctionEPKc)(void *,const char *);
+
+void new_ZN8CPPClass11CPPFunctionEPKc(void * hiddenThis,const char * arg0)
+{
+	if (strcmp(arg0,"This is a short C function") == 0)
+	{
+		old_ZN8CPPClass11CPPFunctionEPKc(hiddenThis,"This is a hijacked2 short C function from new_ZN8CPPClass11CPPFunctionEPKc!");
+	}else{
+		old_ZN8CPPClass11CPPFunctionEPKc(hiddenThis,"This is a hijacked2 C++ function");
+	}
+}
+
+void (*old_CFunction)(const char *);
+
+void new_CFunction(const char * arg0){
+	old_CFunction("This is a hijacked2 C function");
+}
+
+void (*old_shortCFunction)(const char *);
+
+void new_shortCFunction(const char * arg0){
+	old_CFunction("This is a hijacked2 short C function from new_shortCFunction");
+}
+
+%ctor
+{
+	@autoreleasepool
+	{
+		MSImageRef image = MSGetImageByName("/Applications/iOSRETargetApp.app/iOSRETargetApp");
+		void * __ZN8CPPClass11CPPFunctionEPKc = MSFindSymbol(image,"__ZN8CPPClass11CPPFunctionEPKc");
+		if (__ZN8CPPClass11CPPFunctionEPKc)
+		{
+			NSLog(@"iOSRE:Found CPPFunction!");
+		}
+		MSHookFunction((void *)__ZN8CPPClass11CPPFunctionEPKc,(void *)&new_ZN8CPPClass11CPPFunctionEPKc,(void **)&old_ZN8CPPClass11CPPFunctionEPKc);
+
+		void * _CFunction = MSFindSymbol(image,"_CFunction");
+		if (_CFunction)
+		{
+			NSLog(@"iOSRE: Found CFunction!");
+			/* code */
+		}
+		MSHookFunction((void*)_CFunction,(void *)&new_CFunction,(void**)&old_CFunction);
+
+		void * _ShortCFunction = MSFindSymbol(image,"_ShortCFunction");
+		if (_ShortCFunction)
+		{
+			NSLog(@"iOSRE:Found ShortCFunction");
+		}
+
+		MSHookFunction((void *)_ShortCFunction,(void *)&new_shortCFunction,(void **)&old_shortCFunction);
+	}
+}
+
 %hook SpringBoard
 
 - (void)_menuButtonDown:(id)down
