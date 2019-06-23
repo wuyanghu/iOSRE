@@ -1,9 +1,16 @@
 %hook SpringBoard
 
-- (void)_menuButtonDown:(id)down
-{
+- (void)applicationDidFinishLaunching:(id)application{
+	%orig;
+	UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"可以修改系统、软件启动项，这是一个恐怖的事情。" message:nil delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    [alert show];
+}
+
+- (void)_menuButtonDown:(id)down{
 	NSLog(@"You've pressed home button.");
 	%log((NSString *)@"iOSRE",(NSString *)@"Debug");
+	// UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"听说你按下了home键？" message:nil delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+ //    [alert show];
 	%orig;
 }
 
