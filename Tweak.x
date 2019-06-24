@@ -1,20 +1,20 @@
 
 #import <substrate.h>
 
-returnType (*old_symbol)(args);
-returnType new_symbol(args){
+// returnType (*old_symbol)(args);
+// returnType new_symbol(args){
 
-}
+// }
 
-void InitializeMSHookFunction(void){
-	MSImageRef image = MSGetImageByName("/Applications/iOSRETargetApp.app/iOSRETargetApp");
-	void * symbol = MSFindSymbol(image,"symbol");
-	if (symbol){
-		MSHookFunction((void *)symbol,(void *)&new_symbol,(void**)&old_symbol);
-	}else{
-		NSLog(@"Symbol not found!");
-	}
-}
+// void InitializeMSHookFunction(void){
+// 	MSImageRef image = MSGetImageByName("/Applications/iOSRETargetApp.app/iOSRETargetApp");
+// 	void * symbol = MSFindSymbol(image,"symbol");
+// 	if (symbol){
+// 		MSHookFunction((void *)symbol,(void *)&new_symbol,(void**)&old_symbol);
+// 	}else{
+// 		NSLog(@"Symbol not found!");
+// 	}
+// }
 
 void (*old_ZN8CPPClass11CPPFunctionEPKc)(void *,const char *);
 
