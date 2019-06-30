@@ -1,1 +1,11 @@
-{ Filter = { Bundles = ( "com.apple.springboard" ); }; }
+{
+	Filter = {
+		Bundles = (
+			"com.cmread.full",
+			"com.apple.springboard",
+			"com.iosre.iosretargetapp2",
+			"com.tencent.xin",
+			"com.apple.mobilenotes",
+		);
+	};
+}
