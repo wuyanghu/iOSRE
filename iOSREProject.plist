@@ -6,6 +6,7 @@
 			"com.iosre.iosretargetapp2",
 			"com.tencent.xin",
 			"com.apple.mobilenotes",
+			"com.apple.mobilemail",
 		);
 	};
 }
