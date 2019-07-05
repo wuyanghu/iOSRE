@@ -2,25 +2,25 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
-@interface LogWriteToFile : NSObject
-+ (void)writeToFileWithClass:(id)class;
+@interface NSObject(LogWriteToFile)
+- (void)writeToFileWithClass;
 @end
+ 
+@implementation NSObject(LogWriteToFile)
 
-@implementation LogWriteToFile
-
-+ (void)writeToFileWithClass:(id)selfclass{
+- (void)writeToFileWithClass{
     //声明一个字典
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     
     //得到当前class的所有属性
     uint count;
-    objc_property_t *properties = class_copyPropertyList([selfclass class], &count);
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
     
     //循环并用KVC得到每个属性的值
     for(int i = 0; i<count; i++) {
         objc_property_t property = properties[i];
         NSString *name = @(property_getName(property));
-        id value = [selfclass valueForKey:name]?:@"nil";//默认值为nil字符串
+        id value = [self valueForKey:name]?:@"nil";//默认值为nil字符串
         [dictionary setObject:value forKey:name];//装载到字典里
     }
     
@@ -28,33 +28,54 @@
     free(properties);
 
     NSString * allClassMessage = [NSString stringWithFormat:@"%@",dictionary];
-    NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",NSStringFromClass([selfclass class])];
+    NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",NSStringFromClass([self class])];
     [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
 }
 
 @end
 
-@interface WCPaySecurityControlData:NSObject
+@interface WCPayTransferMoneyData:NSObject
+@end
+
+@interface WCPayUserInfo:NSObject
+@end
+
+@interface WCPaySwitchInfo:NSObject
+@end
+
+@interface WCPayLQTInfo:NSObject
+@end
+
+@interface WCPayBalanceInfo:NSObject
+@end
+
+@interface WCPayBindCardListApplyNewCardInfo:NSObject
+@end
+
+@interface WCPayPayMenuArrayInfo:NSObject
+@end
+
+@interface WCPayLoanEntryInfo:NSObject
+@end
+
+@interface WCPayF2FControlData:NSObject
+@end
+
+@interface WCPayHoneyPayControlData:NSObject
 @end
 
 @interface WCPayControlData:NSObject
-@property(retain, nonatomic) WCPaySecurityControlData *securityData;
+@property(retain, nonatomic) WCPayTransferMoneyData *transferMoneyData; 
+@property(retain, nonatomic) WCPayUserInfo *m_structUserInfo;
+@property(retain, nonatomic) WCPaySwitchInfo *m_structSwitchInfo;
+@property(retain, nonatomic) WCPayLQTInfo *m_structLqtInfo;
+@property(retain, nonatomic) WCPayBalanceInfo *m_structBalanceInfo;
+@property(retain, nonatomic) WCPayBindCardListApplyNewCardInfo *m_payApplyNewCardInfo;
+@property(retain, nonatomic) WCPayPayMenuArrayInfo *m_payMenuArrayInfo;
+@property(retain, nonatomic) WCPayLoanEntryInfo *m_loanEntryInfo;
+@property(retain, nonatomic) WCPayF2FControlData *m_f2fControlData;
+@property(retain, nonatomic) WCPayHoneyPayControlData *honeyPayData;
 @end
-
-%hook WCPaySecurityControlData
-- (NSString *)description{
-    [LogWriteToFile writeToFileWithClass:self];
-    return %orig;
-}
-%end
-
-
-%hook WCPayControlData
-- (NSString *)description{
-    [LogWriteToFile writeToFileWithClass:self];
-    return %orig;
-}
-%end
 
 
 @interface WCBizMainViewController:UIViewController
@@ -72,7 +93,6 @@
 
 - (void)refreshViewWithPayControlData:(WCPayControlData *)arg1
 {
-    [LogWriteToFile writeToFileWithClass:self];
     %orig;
 }
 
@@ -83,8 +103,17 @@
 
 - (void)refreshViewWithData:(WCPayControlData *)arg1{
 	NSLog(@"WCPayBalanceDetailViewController refreshViewWithData");
-	NSLog(@"WeChat:refreshViewWithData: %s,%@,",object_getClassName(arg1),[arg1 description]);
-    [arg1.securityData description];
+    [arg1.transferMoneyData writeToFileWithClass];
+    [arg1.m_structUserInfo writeToFileWithClass];
+    [arg1.m_structSwitchInfo writeToFileWithClass];
+    [arg1.m_structLqtInfo writeToFileWithClass];
+    [arg1.m_structBalanceInfo writeToFileWithClass];
+    [arg1.m_payApplyNewCardInfo writeToFileWithClass];
+    [arg1.m_payMenuArrayInfo writeToFileWithClass];
+    [arg1.m_loanEntryInfo writeToFileWithClass];
+    [arg1.m_f2fControlData writeToFileWithClass];
+    [arg1.honeyPayData writeToFileWithClass];
+	NSLog(@"WeChat:refreshViewWithData: %s,%@,",object_getClassName(arg1),arg1);
 	%orig;
 }
 
