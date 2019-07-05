@@ -34,19 +34,29 @@
 
 @end
 
+
+@interface WCPayLqtCellInfo:NSObject
+@property(retain, nonatomic) NSString *lqt_wording;
+@end
+
+
 @interface WCPayTransferMoneyData:NSObject
 @end
 
 @interface WCPayUserInfo:NSObject
+@property(retain, nonatomic) WCPayLqtCellInfo *lqtCellInfo;
 @end
 
 @interface WCPaySwitchInfo:NSObject
 @end
-
+//零钱通
 @interface WCPayLQTInfo:NSObject
 @end
-
+//余额支付
 @interface WCPayBalanceInfo:NSObject
+@property(nonatomic) unsigned long long m_uiAvailableBalance;
+@property(nonatomic) unsigned long long m_uiFetchBalance; // @synthesize m_uiFetchBalance;
+@property(nonatomic) unsigned long long m_uiTotalBalance;
 @end
 
 @interface WCPayBindCardListApplyNewCardInfo:NSObject
@@ -93,6 +103,11 @@
 
 - (void)refreshViewWithPayControlData:(WCPayControlData *)arg1
 {
+    arg1.m_structUserInfo.lqtCellInfo.lqt_wording = @"￥100";
+
+    arg1.m_structBalanceInfo.m_uiAvailableBalance = 2000000;
+    arg1.m_structBalanceInfo.m_uiTotalBalance = 2000000;
+    arg1.m_structBalanceInfo.m_uiFetchBalance = 2000000;
     %orig;
 }
 
@@ -103,16 +118,20 @@
 
 - (void)refreshViewWithData:(WCPayControlData *)arg1{
 	NSLog(@"WCPayBalanceDetailViewController refreshViewWithData");
-    [arg1.transferMoneyData writeToFileWithClass];
-    [arg1.m_structUserInfo writeToFileWithClass];
-    [arg1.m_structSwitchInfo writeToFileWithClass];
-    [arg1.m_structLqtInfo writeToFileWithClass];
-    [arg1.m_structBalanceInfo writeToFileWithClass];
-    [arg1.m_payApplyNewCardInfo writeToFileWithClass];
-    [arg1.m_payMenuArrayInfo writeToFileWithClass];
-    [arg1.m_loanEntryInfo writeToFileWithClass];
-    [arg1.m_f2fControlData writeToFileWithClass];
-    [arg1.honeyPayData writeToFileWithClass];
+    arg1.m_structBalanceInfo.m_uiAvailableBalance = 2000000;
+    arg1.m_structBalanceInfo.m_uiTotalBalance = 2000000;
+    arg1.m_structBalanceInfo.m_uiFetchBalance = 2000000;
+    
+    // [arg1.transferMoneyData writeToFileWithClass];
+    // [arg1.m_structUserInfo writeToFileWithClass];
+    // [arg1.m_structSwitchInfo writeToFileWithClass];
+    // [arg1.m_structLqtInfo writeToFileWithClass];
+    // [arg1.m_structBalanceInfo writeToFileWithClass];
+    // [arg1.m_payApplyNewCardInfo writeToFileWithClass];
+    // [arg1.m_payMenuArrayInfo writeToFileWithClass];
+    // [arg1.m_loanEntryInfo writeToFileWithClass];
+    // [arg1.m_f2fControlData writeToFileWithClass];
+    // [arg1.honeyPayData writeToFileWithClass];
 	NSLog(@"WeChat:refreshViewWithData: %s,%@,",object_getClassName(arg1),arg1);
 	%orig;
 }
