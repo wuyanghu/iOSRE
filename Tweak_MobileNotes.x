@@ -14,6 +14,7 @@
 
 %hook ICNoteEditorViewController
 
+
 - (void)viewWillAppear:(BOOL)arg1{
 	%orig;
 	NSString * content = self.note.title;

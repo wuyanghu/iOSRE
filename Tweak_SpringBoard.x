@@ -33,8 +33,8 @@
 	%log((NSString *)@"iOSRE",(NSString *)@"Debug");
 	[self hookMethod];
 
-	SBScreenshotManager * screenshotManager = [self screenshotManager];
-	[screenshotManager saveScreenshots];
+	// SBScreenshotManager * screenshotManager = [self screenshotManager];
+	// [screenshotManager saveScreenshots];
 	%orig;
 }
 

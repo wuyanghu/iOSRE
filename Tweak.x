@@ -19,20 +19,4 @@
 
 %end
 
-//微信
-%hook WCPayBalanceDetailViewController
-
-
-- (void)viewDidLoad{
-	NSLog(@"WCPayBalanceDetailViewController viewDidLoad");
-	%orig;
-}
-
-- (void)refreshViewWithData:(id)arg1{
-	NSLog(@"WCPayBalanceDetailViewController refreshViewWithData");
-	NSLog(@"%@",arg1);
-	%orig;
-}
-
-%end
 
