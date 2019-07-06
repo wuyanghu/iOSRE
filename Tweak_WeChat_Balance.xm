@@ -3,16 +3,7 @@
 #import <objc/runtime.h>
 #import "src/NSObject+LogWriteToFile.h"
 
-@interface WCPayLqtCellInfo:NSObject
-@property(retain, nonatomic) NSString *lqt_wording;
-@end
-
-
 @interface WCPayTransferMoneyData:NSObject
-@end
-
-@interface WCPayUserInfo:NSObject
-@property(retain, nonatomic) WCPayLqtCellInfo *lqtCellInfo;
 @end
 
 @interface WCPaySwitchInfo:NSObject
@@ -20,12 +11,7 @@
 //零钱通
 @interface WCPayLQTInfo:NSObject
 @end
-//余额支付
-@interface WCPayBalanceInfo:NSObject
-@property(nonatomic) unsigned long long m_uiAvailableBalance;
-@property(nonatomic) unsigned long long m_uiFetchBalance; // @synthesize m_uiFetchBalance;
-@property(nonatomic) unsigned long long m_uiTotalBalance;
-@end
+
 
 @interface WCPayBindCardListApplyNewCardInfo:NSObject
 @end
@@ -40,6 +26,21 @@
 @end
 
 @interface WCPayHoneyPayControlData:NSObject
+@end
+
+@interface WCPayLqtCellInfo:NSObject
+@property(retain, nonatomic) NSString *lqt_wording;
+@end
+
+@interface WCPayUserInfo:NSObject
+@property(retain, nonatomic) WCPayLqtCellInfo *lqtCellInfo;
+@end
+
+//余额支付
+@interface WCPayBalanceInfo:NSObject
+@property(nonatomic) unsigned long long m_uiAvailableBalance;
+@property(nonatomic) unsigned long long m_uiFetchBalance; // @synthesize m_uiFetchBalance;
+@property(nonatomic) unsigned long long m_uiTotalBalance;
 @end
 
 @interface WCPayControlData:NSObject
@@ -69,7 +70,6 @@ static long long canUsingMoney = 80000000;
     %orig;
     self.title = @"My Wallet";
     NSLog(@"aaaaa");
-    // [LogWriteToFile writeToFileWithClass];
 }
 
 - (void)refreshViewWithPayControlData:(WCPayControlData *)arg1
@@ -86,13 +86,12 @@ static long long canUsingMoney = 80000000;
 %hook WCPayBalanceDetailViewController
 
 - (void)refreshViewWithData:(WCPayControlData *)arg1{
-	NSLog(@"WCPayBalanceDetailViewController refreshViewWithData");
     arg1.m_structBalanceInfo.m_uiAvailableBalance = canUsingMoney;
     arg1.m_structBalanceInfo.m_uiTotalBalance = canUsingMoney;
     arg1.m_structBalanceInfo.m_uiFetchBalance = canUsingMoney;
 
     arg1.m_structUserInfo.lqtCellInfo.lqt_wording = @"￥1000000000";
-    [arg1.transferMoneyData writeToFileWithClass];
+    // [arg1.transferMoneyData writeToFileWithClass];
     // [arg1.m_structUserInfo writeToFileWithClass];
     // [arg1.m_structSwitchInfo writeToFileWithClass];
     // [arg1.m_structLqtInfo writeToFileWithClass];
