@@ -8,7 +8,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = iOSREProject
 
-iOSREProject_FILES = Tweak.x Tweak_MobileNotes.x Tweak_SpringBoard.x Tweak_MobileMail.x Tweak_WeChat.x
+iOSREProject_FILES = Tweak.x Tweak_MobileNotes.x Tweak_SpringBoard.x Tweak_MobileMail.x Tweak_WeChat.xm src/*.m
 iOSREProject_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk

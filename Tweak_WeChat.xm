@@ -1,39 +1,7 @@
 #import <substrate.h>
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-
-@interface NSObject(LogWriteToFile)
-- (void)writeToFileWithClass;
-@end
- 
-@implementation NSObject(LogWriteToFile)
-
-- (void)writeToFileWithClass{
-    //声明一个字典
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    
-    //得到当前class的所有属性
-    uint count;
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
-    
-    //循环并用KVC得到每个属性的值
-    for(int i = 0; i<count; i++) {
-        objc_property_t property = properties[i];
-        NSString *name = @(property_getName(property));
-        id value = [self valueForKey:name]?:@"nil";//默认值为nil字符串
-        [dictionary setObject:value forKey:name];//装载到字典里
-    }
-    
-    //释放
-    free(properties);
-
-    NSString * allClassMessage = [NSString stringWithFormat:@"%@",dictionary];
-    NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",NSStringFromClass([self class])];
-    [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
-}
-
-@end
-
+#import "src/NSObject+LogWriteToFile.h"
 
 @interface WCPayLqtCellInfo:NSObject
 @property(retain, nonatomic) NSString *lqt_wording;
@@ -93,21 +61,22 @@
 @end
 
 
+static long long canUsingMoney = 80000000;
 
 %hook WCBizMainViewController
 
 - (void)viewWillAppear:(BOOL)arg1{
     %orig;
     self.title = @"My Wallet";
+    NSLog(@"aaaaa");
+    // [LogWriteToFile writeToFileWithClass];
 }
 
 - (void)refreshViewWithPayControlData:(WCPayControlData *)arg1
 {
-    arg1.m_structUserInfo.lqtCellInfo.lqt_wording = @"￥100";
-
-    arg1.m_structBalanceInfo.m_uiAvailableBalance = 2000000;
-    arg1.m_structBalanceInfo.m_uiTotalBalance = 2000000;
-    arg1.m_structBalanceInfo.m_uiFetchBalance = 2000000;
+    arg1.m_structBalanceInfo.m_uiAvailableBalance = canUsingMoney;
+    arg1.m_structBalanceInfo.m_uiTotalBalance = canUsingMoney;
+    arg1.m_structBalanceInfo.m_uiFetchBalance = canUsingMoney;
     %orig;
 }
 
@@ -118,11 +87,12 @@
 
 - (void)refreshViewWithData:(WCPayControlData *)arg1{
 	NSLog(@"WCPayBalanceDetailViewController refreshViewWithData");
-    arg1.m_structBalanceInfo.m_uiAvailableBalance = 2000000;
-    arg1.m_structBalanceInfo.m_uiTotalBalance = 2000000;
-    arg1.m_structBalanceInfo.m_uiFetchBalance = 2000000;
-    
-    // [arg1.transferMoneyData writeToFileWithClass];
+    arg1.m_structBalanceInfo.m_uiAvailableBalance = canUsingMoney;
+    arg1.m_structBalanceInfo.m_uiTotalBalance = canUsingMoney;
+    arg1.m_structBalanceInfo.m_uiFetchBalance = canUsingMoney;
+
+    arg1.m_structUserInfo.lqtCellInfo.lqt_wording = @"￥1000000000";
+    [arg1.transferMoneyData writeToFileWithClass];
     // [arg1.m_structUserInfo writeToFileWithClass];
     // [arg1.m_structSwitchInfo writeToFileWithClass];
     // [arg1.m_structLqtInfo writeToFileWithClass];
