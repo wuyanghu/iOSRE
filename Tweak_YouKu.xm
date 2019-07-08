@@ -36,7 +36,9 @@
 
 - (void)getADInfo:(id)arg1{
     @try {
-        [arg1 writeToFileWithClass];
+        if(arg1){
+            [arg1 writeToFileWithClass];
+        }
     } @catch (NSException *exception) {
         [OCShowAlertView showAlertViewWithArg1:exception];
     } @finally {

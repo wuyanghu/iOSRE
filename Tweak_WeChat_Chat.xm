@@ -1,6 +1,5 @@
 #import <substrate.h>
 #import <Foundation/Foundation.h>
-#import "src/NSObject+LogWriteToFile.h"
 #import "src/BalloonFlyView.h"
 
 static NSTimer * flyTimer;
