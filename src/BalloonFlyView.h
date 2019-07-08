@@ -13,5 +13,4 @@
 @interface BalloonFlyView : UIView
 
 - (void)showAnimationInView:(UIView *)view;
-
 @end

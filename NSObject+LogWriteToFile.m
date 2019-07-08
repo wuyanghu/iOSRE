@@ -1,14 +1,14 @@
-#import <substrate.h>
-#import <Foundation/Foundation.h>
-#import <objc/runtime.h>
-// #import "src/NSObject+LogWriteToFile.h"
+//
+//  NSObject+ModelToDictionary.m
+//  iOSREHeaders
+//
+//  Created by ruantong on 2019/7/5.
+//  Copyright © 2019 wupeng. All rights reserved.
+//
 
-@interface NSObject (LogWriteToFile)
-- (void)writeToFileWithClass;
-- (id)idFromObject:(nonnull id)object;
-- (NSDictionary *)dictionaryFromModel;
-- (void)showAlertView:(NSString *)message;
-@end
+#import "NSObject+LogWriteToFile.h"
+#import <objc/runtime.h>
+#import "OCShowAlertView.h"
 
 @implementation NSObject (LogWriteToFile)
 
@@ -45,7 +45,6 @@
                 if (![value isMemberOfClass:[NSObject class]]) {
                     [dict setObject:[value dictionaryFromModel] forKey:key];
                 }
-
             }
         } else if (key && value == nil) {
             // 如果当前对象该值为空，设为nil。在字典中直接加nil会抛异常，需要加NSNull对象
@@ -114,105 +113,4 @@
 }
 
 
-- (void)showAlertView:(NSString *)message{
-    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:message message:nil delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-    [alert show];
-}
-
 @end
-
-@interface WCPayTransferMoneyData:NSObject
-@end
-
-@interface WCPaySwitchInfo:NSObject
-@end
-//零钱通
-@interface WCPayLQTInfo:NSObject
-@end
-
-
-@interface WCPayBindCardListApplyNewCardInfo:NSObject
-@end
-
-@interface WCPayPayMenuArrayInfo:NSObject
-@end
-
-@interface WCPayLoanEntryInfo:NSObject
-@end
-
-@interface WCPayF2FControlData:NSObject
-@end
-
-@interface WCPayHoneyPayControlData:NSObject
-@end
-
-@interface WCPayLqtCellInfo:NSObject
-@property(retain, nonatomic) NSString *lqt_wording;
-@end
-
-@interface WCPayUserInfo:NSObject
-@property(retain, nonatomic) WCPayLqtCellInfo *lqtCellInfo;
-@end
-
-//余额支付
-@interface WCPayBalanceInfo:NSObject
-@property(nonatomic) unsigned long long m_uiAvailableBalance;
-@property(nonatomic) unsigned long long m_uiFetchBalance; // @synthesize m_uiFetchBalance;
-@property(nonatomic) unsigned long long m_uiTotalBalance;
-@end
-
-@interface WCPayControlData:NSObject
-@property(retain, nonatomic) WCPayTransferMoneyData *transferMoneyData; 
-@property(retain, nonatomic) WCPayUserInfo *m_structUserInfo;
-@property(retain, nonatomic) WCPaySwitchInfo *m_structSwitchInfo;
-@property(retain, nonatomic) WCPayLQTInfo *m_structLqtInfo;
-@property(retain, nonatomic) WCPayBalanceInfo *m_structBalanceInfo;
-@property(retain, nonatomic) WCPayBindCardListApplyNewCardInfo *m_payApplyNewCardInfo;
-@property(retain, nonatomic) WCPayPayMenuArrayInfo *m_payMenuArrayInfo;
-@property(retain, nonatomic) WCPayLoanEntryInfo *m_loanEntryInfo;
-@property(retain, nonatomic) WCPayF2FControlData *m_f2fControlData;
-@property(retain, nonatomic) WCPayHoneyPayControlData *honeyPayData;
-@end
-
-
-@interface WCBizMainViewController:UIViewController
-
-@end
-
-
-static long long canUsingMoney = 80000000;
-
-%hook WCBizMainViewController
-
-- (void)viewWillAppear:(BOOL)arg1{
-    %orig;
-    self.title = @"My Wallet";
-    NSLog(@"aaaaa");
-}
-
-- (void)refreshViewWithPayControlData:(WCPayControlData *)arg1
-{
-    [arg1 writeToFileWithClass]; 
-    arg1.m_structBalanceInfo.m_uiAvailableBalance = canUsingMoney;
-    arg1.m_structBalanceInfo.m_uiTotalBalance = canUsingMoney;
-    arg1.m_structBalanceInfo.m_uiFetchBalance = canUsingMoney;
-    %orig;
-}
-
-%end
-
-//微信
-%hook WCPayBalanceDetailViewController
-
-- (void)refreshViewWithData:(WCPayControlData *)arg1{
-    arg1.m_structBalanceInfo.m_uiAvailableBalance = canUsingMoney;
-    arg1.m_structBalanceInfo.m_uiTotalBalance = canUsingMoney;
-    arg1.m_structBalanceInfo.m_uiFetchBalance = canUsingMoney;
-
-    arg1.m_structUserInfo.lqtCellInfo.lqt_wording = @"￥1000000000";
-    
-	NSLog(@"WeChat:refreshViewWithData: %s,%@,",object_getClassName(arg1),arg1);
-	%orig;
-}
-
-%end
