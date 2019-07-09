@@ -6,11 +6,25 @@
 //  Copyright © 2019 wupeng. All rights reserved.
 //
 
-#import "NSObject+LogWriteToFile.h"
+#import "NSObject+AllIvarLog.h"
 #import <objc/runtime.h>
 #import "OCShowAlertView.h"
 
-@implementation NSObject (LogWriteToFile)
+@implementation NSObject (AllIvarLog)
+
++ (void)load{
+    [self zg_swizzleInstanceMethodWithOriginSel:@selector(setValue:forUndefinedKey:) swizzledSel:@selector(setCustomValue:forUndefinedKey:)];
+}
+
+- (void)zg_swizzleInstanceMethodWithOriginSel:(SEL)originSel swizzledSel:(SEL)swizzledSel {
+    Method m1 = class_getInstanceMethod([self class], originSel);
+    Method m2 = class_getInstanceMethod([self class], swizzledSel);
+    method_exchangeImplementations(m1, m2);
+}
+
+- (void)setCustomValue:(id)value forUndefinedKey:(NSString *)key{
+    [OCShowAlertView showAlertViewWithMessage:key];
+}
 
 - (void)writeToFileWithClass{
     

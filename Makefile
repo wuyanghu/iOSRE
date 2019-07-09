@@ -8,7 +8,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = iOSREProject
 
-iOSREProject_FILES = src/*.m OCShowAlertView.m NSObject+LogWriteToFile.m Tweak_YouKu.xm Tweak_WeChat_Chat.xm Tweak.x Tweak_MobileNotes.x Tweak_SpringBoard.x Tweak_MobileMail.x Tweak_WeChat_Balance.xm
+iOSREProject_FILES = src/*.m OCShowAlertView.m NSObject+AllIvarLog.m NSObject+SimplePropertyLog.m Tweak_YouKu.xm Tweak_WeChat_Chat.xm Tweak.x Tweak_MobileNotes.x Tweak_SpringBoard.x Tweak_MobileMail.x Tweak_WeChat_Balance.xm
 iOSREProject_CFLAGS = -fobjc-arc
 iOSREProject_FRAMEWORKS = UIKit
 include $(THEOS_MAKE_PATH)/tweak.mk

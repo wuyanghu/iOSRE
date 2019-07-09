@@ -10,10 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSObject (LogWriteToFile)
+@interface NSObject (SimplePropertyLog)
 - (void)writeToFileWithClass;
-- (id)idFromObject:(nonnull id)object;
-- (NSDictionary *)dictionaryFromModel;
 @end
 
 NS_ASSUME_NONNULL_END

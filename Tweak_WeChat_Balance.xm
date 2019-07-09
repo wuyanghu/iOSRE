@@ -1,7 +1,7 @@
 #import <substrate.h>
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import "NSObject+LogWriteToFile.h"
+#import "NSObject+AllIvarLog.h"
 
 @interface WCPayTransferMoneyData:NSObject
 @end
