@@ -27,11 +27,20 @@
 }
 
 - (void)writeToFileWithClass{
-    
+    NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",NSStringFromClass([self class])];
+    if ([self isKindOfClass:[NSArray class]]) {
+        NSArray * array = [self idFromObject:self];
+         BOOL writeSuccess = [array writeToFile:writePath atomically:NO];
+         [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%@",writeSuccess?@"成功":@"失败"]];
+        return;
+    }else if ([self isKindOfClass:[NSDictionary class]]){
+        NSDictionary * dict = [self idFromObject:self];
+        [dict writeToFile:writePath atomically:NO];
+        return;
+    }
     NSDictionary *dictionary = [self dictionaryFromModel];
     
     NSString * allClassMessage = [NSString stringWithFormat:@"%@",dictionary];
-    NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",NSStringFromClass([self class])];
     [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
 }
 
