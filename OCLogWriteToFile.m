@@ -6,60 +6,50 @@
 //  Copyright © 2019 wupeng. All rights reserved.
 //
 
-#import "NSObject+AllIvarLog.h"
+#import "OCLogWriteToFile.h"
 #import <objc/runtime.h>
 #import "OCShowAlertView.h"
 
-@implementation NSObject (AllIvarLog)
+@implementation OCLogWriteToFile
 
-+ (void)load{
-    [self zg_swizzleInstanceMethodWithOriginSel:@selector(setValue:forUndefinedKey:) swizzledSel:@selector(setCustomValue:forUndefinedKey:)];
-}
 
-- (void)zg_swizzleInstanceMethodWithOriginSel:(SEL)originSel swizzledSel:(SEL)swizzledSel {
-    Method m1 = class_getInstanceMethod([self class], originSel);
-    Method m2 = class_getInstanceMethod([self class], swizzledSel);
-    method_exchangeImplementations(m1, m2);
-}
-
-- (void)setCustomValue:(id)value forUndefinedKey:(NSString *)key{
-
-}
-
-- (void)writeToFileWithClass{
-
-    NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",NSStringFromClass([self class])];
-    if ([self isKindOfClass:[NSArray class]]) {
-
++ (void)writeToFileWithFileName:(NSString *)fileName obj:(id)obj{
+    
+    NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",fileName];
+    if ([obj isKindOfClass:[NSArray class]]) {
+        
         NSMutableDictionary * resultDict = [NSMutableDictionary new];
-        NSArray * selfArray = (NSArray *)self;
+        NSArray * selfArray = (NSArray *)obj;
         for (int i = 0;i<selfArray.count;i++) {
-            NSDictionary * dict = [selfArray[i] dictionaryFromModel];
+            NSDictionary * dict = [self dictionaryFromModel:selfArray[i]];
             [resultDict setObject:dict forKey:@(i)];
         }
         NSString * allClassMessage = [NSString stringWithFormat:@"%@",resultDict];
         [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
         
+        [OCShowAlertView showAlertViewWithMessage:@"Array"];
         return;
     }else if ([self isKindOfClass:[NSDictionary class]]){
+        NSString * allClassMessage = [NSString stringWithFormat:@"%@",(NSDictionary *)obj];
+        [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
         return;
     }
-    NSDictionary *dictionary = [self dictionaryFromModel];
+    NSDictionary *dictionary = [self dictionaryFromModel:obj];
     
     NSString * allClassMessage = [NSString stringWithFormat:@"%@",dictionary];
     [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
 }
 
-- (NSDictionary *)dictionaryFromModel
++ (NSDictionary *)dictionaryFromModel:(id)obj
 {
     unsigned int count = 0;
     
-    Ivar * ivars = class_copyIvarList([self class], &count);
+    Ivar * ivars = class_copyIvarList([obj class], &count);
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:count];
     
     for (int i = 0; i < count; i++) {
         NSString *key = [NSString stringWithUTF8String:ivar_getName(ivars[i])];
-        id value = [self valueForKey:key];
+        id value = [obj valueForKey:key];
         
         //only add it to dictionary if it is not nil
         if (key && value) {
@@ -67,12 +57,12 @@
                 || [value isKindOfClass:[NSNumber class]]) {
                 [dict setObject:value forKey:key];
             }else if ([value isKindOfClass:[NSArray class]]
-                     || [value isKindOfClass:[NSDictionary class]]) {
+                      || [value isKindOfClass:[NSDictionary class]]) {
                 // 数组类型或字典类型
                 [dict setObject:[self idFromObject:value] forKey:key];
             }else{
                 if (![value isMemberOfClass:[NSObject class]]) {
-                    [dict setObject:[value dictionaryFromModel] forKey:key];
+                    [dict setObject:[self dictionaryFromModel:value] forKey:key];
                 }
             }
         } else if (key && value == nil) {
@@ -85,7 +75,7 @@
     return dict;
 }
 
-- (id)idFromObject:(nonnull id)object
++ (id)idFromObject:(nonnull id)object
 {
     if ([object isKindOfClass:[NSArray class]]) {
         if (object != nil && [object count] > 0) {
@@ -103,7 +93,7 @@
                 }
                 // model转化为字典
                 else {
-                    [array addObject:[obj dictionaryFromModel]];
+                    [array addObject:[self dictionaryFromModel:obj]];
                 }
             }
             return array;
@@ -128,7 +118,7 @@
                 }
                 // model转化为字典
                 else {
-                    [dic setObject:[object[key] dictionaryFromModel] forKey:key];
+                    [dic setObject:[self dictionaryFromModel:object[key]] forKey:key];
                 }
             }
             return dic;
@@ -140,6 +130,5 @@
     
     return [NSNull null];
 }
-
 
 @end

@@ -1,7 +1,7 @@
 #import <substrate.h>
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
-#import "NSObject+AllIvarLog.h"
+#import "OCLogWriteToFile.h"
 
 @interface WCPayTransferMoneyData:NSObject
 @end
@@ -73,7 +73,7 @@ static long long canUsingMoney = 80000000;
 
 - (void)refreshViewWithPayControlData:(WCPayControlData *)arg1
 {
-    [arg1 writeToFileWithClass]; 
+    [OCLogWriteToFile writeToFileWithFileName:@"WCPayControlData" obj:arg1];
     arg1.m_structBalanceInfo.m_uiAvailableBalance = canUsingMoney;
     arg1.m_structBalanceInfo.m_uiTotalBalance = canUsingMoney;
     arg1.m_structBalanceInfo.m_uiFetchBalance = canUsingMoney;
