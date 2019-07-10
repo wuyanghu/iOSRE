@@ -27,15 +27,27 @@
 }
 
 - (void)writeToFileWithClass{
+    [OCShowAlertView showAlertViewWithMessage:@"NSArray1"];
+
     NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",NSStringFromClass([self class])];
     if ([self isKindOfClass:[NSArray class]]) {
-        NSArray * array = [self idFromObject:self];
-         BOOL writeSuccess = [array writeToFile:writePath atomically:NO];
-         [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%@",writeSuccess?@"成功":@"失败"]];
+
+        NSMutableDictionary * resultDict = [NSMutableDictionary new];
+        NSArray * selfArray = (NSArray *)self;
+        for (int i = 0;i<selfArray.count;i++) {
+            NSDictionary * dict = [selfArray[i] dictionaryFromModel];
+            [resultDict setObject:dict forKey:@(i)];
+        }
+
+        [OCShowAlertView showAlertViewWithMessage:@"NSArray"];
+
+        NSString * allClassMessage = [NSString stringWithFormat:@"%@",resultDict];
+        [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
+        
         return;
     }else if ([self isKindOfClass:[NSDictionary class]]){
-        NSDictionary * dict = [self idFromObject:self];
-        [dict writeToFile:writePath atomically:NO];
+        [OCShowAlertView showAlertViewWithMessage:@"NSDictionary"];
+
         return;
     }
     NSDictionary *dictionary = [self dictionaryFromModel];
