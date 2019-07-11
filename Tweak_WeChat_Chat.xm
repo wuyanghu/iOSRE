@@ -40,28 +40,25 @@ static CGFloat animatedTime = 2.0;
     BalloonFlyView *vi = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
     [vi showAnimationInView:self.view];
 
-    BalloonFlyView *vi2 = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
-    [vi2 showAnimationInView:self.view];
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(animatedTime/3*1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(animatedTime/4*1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         BalloonFlyView *vi = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
         [vi showAnimationInView:self.view];
-
-        BalloonFlyView *vi2 = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
-        [vi2 showAnimationInView:self.view];
 
     });
     
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(animatedTime/3*2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(animatedTime/4*2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         BalloonFlyView *vi = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
         [vi showAnimationInView:self.view];
 
-        BalloonFlyView *vi2 = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
-        [vi2 showAnimationInView:self.view];
-
     });
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(animatedTime/4*3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        BalloonFlyView *vi = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
+        [vi showAnimationInView:self.view];
+
+    });
 }
 
 

@@ -2,7 +2,7 @@ THEOS_DEVICE_IP = 127.0.0.1
 THEOS_DEVICE_PORT = 2222
 # THEOS_DEVICE_IP = 192.168.2.101
 INSTALL_TARGET_PROCESSES = SpringBoard
-ARCHS = armv7 armv7s
+ARCHS = armv7 arm64
 
 include $(THEOS)/makefiles/common.mk
 
