@@ -16,6 +16,7 @@
 + (void)writeToFileWithFileName:(NSString *)fileName obj:(id)obj{
     
     NSString * writePath = [NSString stringWithFormat:@"/var/mobile/%@.txt",fileName];
+    NSDictionary * resultAllDict;
     if ([obj isKindOfClass:[NSArray class]]) {
         
         NSMutableDictionary * resultDict = [NSMutableDictionary new];
@@ -24,20 +25,24 @@
             NSDictionary * dict = [self dictionaryFromModel:selfArray[i]];
             [resultDict setObject:dict forKey:@(i)];
         }
-        NSString * allClassMessage = [NSString stringWithFormat:@"%@",resultDict];
-        [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
         
-        [OCShowAlertView showAlertViewWithMessage:@"Array"];
-        return;
-    }else if ([self isKindOfClass:[NSDictionary class]]){
-        NSString * allClassMessage = [NSString stringWithFormat:@"%@",(NSDictionary *)obj];
-        [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
-        return;
+        resultAllDict = resultDict;
+
+    }else if ([obj isKindOfClass:[NSDictionary class]]){
+        resultAllDict = [self idFromObject:obj];
+    }else{
+        resultAllDict = [self dictionaryFromModel:obj];
     }
-    NSDictionary *dictionary = [self dictionaryFromModel:obj];
     
-    NSString * allClassMessage = [NSString stringWithFormat:@"%@",dictionary];
+    NSString * allClassMessage = [self dictionaryToJson:resultAllDict];
     [allClassMessage writeToFile:writePath atomically:NO encoding:4 error:NULL];
+}
+
++ (NSString*)dictionaryToJson:(NSDictionary *)dic{
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 }
 
 + (NSDictionary *)dictionaryFromModel:(id)obj

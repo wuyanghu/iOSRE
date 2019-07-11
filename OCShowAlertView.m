@@ -18,15 +18,8 @@
 }
 
 + (void)showAlertViewWithArg1:(id)arg1{
-	NSString * message = [NSString stringWithFormat:@"MobileMail:copyAllMessages %s,%@,",object_getClassName(arg1),arg1];
+	NSString * message = [NSString stringWithFormat:@"%s,%@,",object_getClassName(arg1),arg1];
     [self showAlertViewWithMessage:message];
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end
