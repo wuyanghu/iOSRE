@@ -18,8 +18,17 @@
 }
 
 + (void)showAlertViewWithArg1:(id)arg1{
-	NSString * message = [NSString stringWithFormat:@"%s,%@,",object_getClassName(arg1),arg1];
+	NSString * message = [self arg1ToString:arg1];
     [self showAlertViewWithMessage:message];
+}
+
++ (NSString *)arg1ToString:(id)arg1{
+	NSString * message = [NSString stringWithFormat:@"%s,%@,",object_getClassName(arg1),arg1];
+	return message;
+}
+
++ (void)printCurrentThread:(NSString *)name{
+	NSLog(@"name %@",[NSThread currentThread]);
 }
 
 @end

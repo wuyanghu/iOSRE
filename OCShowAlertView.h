@@ -11,4 +11,5 @@
 @interface OCShowAlertView : UIView
 + (void)showAlertViewWithMessage:(NSString *)message;
 + (void)showAlertViewWithArg1:(id)arg1;
++ (NSString *)arg1ToString:(id)arg1;
 @end

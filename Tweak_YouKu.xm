@@ -50,22 +50,27 @@
 %hook OPPaymentVideoModel
 
 - (NSDictionary *)playEndInfo{
-	// [OCLogWriteToFile writeToFileWithFileName:@"playEndInfo" obj:self.playEndInfo];
-
+	id playEndInfo = %orig;
+	[OCLogWriteToFile writeToFileWithFileName:@"playEndInfo" obj:playEndInfo];
 	return %orig;
 }
 
-+ (id)createFromDictionary:(id)arg1{
+- (NSDictionary *)sourceData{
+	id sourceData = %orig;
+	[OCLogWriteToFile writeToFileWithFileName:@"sourceData" obj:sourceData];
+	return %orig;
+}
+
++ (id)createFromDictionary:(NSDictionary *)arg1{
+	NSLog(@"createFromDictionary");
+	NSMutableDictionary * newDict = [NSMutableDictionary dictionaryWithDictionary:arg1];
+    [newDict setObject:@"10" forKey:@"try_time"];
+    arg1 = newDict;
+
 	id reuslt = %orig;
-	@try {
-        [OCLogWriteToFile writeToFileWithFileName:@"OPPaymentVideoModelself" obj:arg1];
-    } @catch (NSException *exception) {
-        [OCShowAlertView showAlertViewWithArg1:exception];
-    } @finally {
-    	[OCShowAlertView showAlertViewWithArg1:arg1];
-    }
-	
+
 	return reuslt;
 }
+
 
 %end

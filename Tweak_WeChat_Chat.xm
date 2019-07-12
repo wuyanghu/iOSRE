@@ -1,6 +1,7 @@
 #import <substrate.h>
 #import <Foundation/Foundation.h>
 #import "src/BalloonFlyView.h"
+#import "OCShowAlertView.h"
 
 static NSTimer * flyTimer;
 static CGFloat animatedTime = 2.0;
@@ -11,6 +12,7 @@ static CGFloat animatedTime = 2.0;
 @interface BaseMsgContentViewController:UIViewController
 - (id)getTableView;
 - (void)showBallonFly;
+- (void)tryCatchShowBallonFly;
 @end
 
 %hook BaseMsgContentViewController
@@ -21,8 +23,8 @@ static CGFloat animatedTime = 2.0;
     UIImage * image = [UIImage imageWithContentsOfFile:CHFile(@"IMG_0263.JPG")];
     tableView.layer.contents = (__bridge id)image.CGImage;
 
-    [self showBallonFly];
-    flyTimer = [NSTimer scheduledTimerWithTimeInterval:animatedTime target:self selector:@selector(showBallonFly) userInfo:nil repeats:YES];
+    [self tryCatchShowBallonFly];
+    flyTimer = [NSTimer scheduledTimerWithTimeInterval:animatedTime target:self selector:@selector(tryCatchShowBallonFly) userInfo:nil repeats:YES];
 
     %orig;
     
@@ -33,6 +35,17 @@ static CGFloat animatedTime = 2.0;
     [flyTimer invalidate];
     flyTimer = nil;
 
+}
+
+%new 
+- (void)tryCatchShowBallonFly{
+    @try {
+        [self showBallonFly];
+    } @catch (NSException *exception) {
+
+    } @finally {
+
+    }
 }
 
 %new
@@ -47,7 +60,6 @@ static CGFloat animatedTime = 2.0;
 
     });
     
-
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(animatedTime/4*2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         BalloonFlyView *vi = [[BalloonFlyView alloc] initWithFrame:CGRectZero];
         [vi showAnimationInView:self.view];
@@ -59,6 +71,7 @@ static CGFloat animatedTime = 2.0;
         [vi showAnimationInView:self.view];
 
     });
+    
 }
 
 
