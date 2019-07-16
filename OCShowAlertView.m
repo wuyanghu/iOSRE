@@ -7,6 +7,7 @@
 //
 
 #import "OCShowAlertView.h"
+#import "OCLogWriteToFile.h"
 
 @implementation OCShowAlertView
 
@@ -29,6 +30,21 @@
 
 + (void)printCurrentThread:(NSString *)name{
 	NSLog(@"name %@",[NSThread currentThread]);
+}
+
++ (void)printArg1WithPrefix:(NSString *)prefix arg1:(id)arg1{
+	NSString * message = [self arg1ToString:arg1];
+	NSLog(@"%@_%@",prefix,message);
+}
+
++ (void)tryCatchShowAlert:(NSString *)fileName arg1:(id)arg1{
+	@try {
+		[OCLogWriteToFile writeToFileWithFileName:fileName obj:arg1];
+    } @catch (NSException *exception) {
+    	[OCShowAlertView showAlertViewWithArg1:exception];
+    } @finally {
+    	[OCShowAlertView showAlertViewWithArg1:arg1];
+    }
 }
 
 @end

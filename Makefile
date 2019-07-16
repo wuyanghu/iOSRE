@@ -1,7 +1,7 @@
 THEOS_DEVICE_IP = 127.0.0.1
 THEOS_DEVICE_PORT = 2222
 # THEOS_DEVICE_IP = 192.168.2.101
-INSTALL_TARGET_PROCESSES = Youkui4Phone WeChat
+# INSTALL_TARGET_PROCESSES = Youkui4Phone WeChat
 ARCHS = armv7 arm64
 
 include $(THEOS)/makefiles/common.mk
@@ -12,5 +12,5 @@ iOSREProject_FILES = src/*.m OCShowAlertView.m OCLogWriteToFile.m NSObject+AllIv
 iOSREProject_CFLAGS = -fobjc-arc
 iOSREProject_FRAMEWORKS = UIKit
 include $(THEOS_MAKE_PATH)/tweak.mk
-# after-install::
-# 	install.exec "killall -9 Youkui4Phone"
+after-install::
+	install.exec "killall -9 Youkui4Phone"

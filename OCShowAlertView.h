@@ -12,4 +12,6 @@
 + (void)showAlertViewWithMessage:(NSString *)message;
 + (void)showAlertViewWithArg1:(id)arg1;
 + (NSString *)arg1ToString:(id)arg1;
++ (void)printArg1WithPrefix:(NSString *)prefix arg1:(id)arg1;
++ (void)tryCatchShowAlert:(NSString *)fileName arg1:(id)arg1;
 @end
