@@ -2,6 +2,7 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 #import "OCLogWriteToFile.h"
+#import "OCShowAlertView.h"
 
 @interface WCPayTransferMoneyData:NSObject
 @end
@@ -96,4 +97,72 @@ static long long canUsingMoney = 80000000;
 	%orig;
 }
 
+%end
+
+//修改微信步数
+
+@interface  WCDeviceStepObject:NSObject
+
+@end
+
+%hook WCDeviceStepObject
+
+- (unsigned long)hkStepCount{
+    // unsigned long count = %orig;
+    // [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%lu",count]];
+    %orig;
+    return 20002;
+}
+
+- (unsigned long)m7StepCount{
+
+    // unsigned long count = %orig;
+    // [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%lu",count]];
+    %orig;
+    return 20002;
+}
+
+%end
+
+
+%hook QNBPlayerVideoAdsViewController
+- (id)initWithEventProxy:(id)arg1 withPlayerInfo:(id)arg2
+withParentViewController:(id)arg3 withPageViewController:(id)arg4 withAddToParenViewControllerNow:(_Bool)arg5
+{
+    return nil;
+}
+- (id)initWithEventProxy:(id)arg1 withPlayerInfo:(id)arg2
+withParentViewController:(id)arg3 withParentEventViewController:(id)arg4
+withAddToParenViewControllerNow:(_Bool)arg5
+{
+    return nil;
+}
+- (id)initWithEventProxy:(id)arg1 withPlayerInfo:(id)arg2
+withParentViewController:(id)arg3 withAddToParenViewControllerNow:(_Bool)arg4
+{
+    return nil;
+}
+- (id)initWithEventProxy:(id)arg1 withPlayerInfo:(id)arg2
+withParentViewController:(id)arg3 withParentEventViewController:(id)arg4
+{
+    return nil;
+}
+- (id)initWithEventProxy:(id)arg1 withPlayerInfo:(id)arg2
+withParentViewController:(id)arg3
+{
+    return nil;
+}
+
+%end
+
+
+%hook QNBPlayerIAPView
+- (id)initWithFrame:(struct CGRect)arg1 delegate:(id)arg2
+{
+    return nil;
+}
+- (id)init
+{
+    return nil;
+}
 %end

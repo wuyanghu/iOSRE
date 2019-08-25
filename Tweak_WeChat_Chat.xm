@@ -19,12 +19,12 @@ static CGFloat animatedTime = 2.0;
 
 - (void)viewWillAppear:(BOOL)animated{
     
-    YYTableView * tableView = (YYTableView *)[self getTableView];
-    UIImage * image = [UIImage imageWithContentsOfFile:CHFile(@"IMG_0263.JPG")];
-    tableView.layer.contents = (__bridge id)image.CGImage;
+    // YYTableView * tableView = (YYTableView *)[self getTableView];
+    // UIImage * image = [UIImage imageWithContentsOfFile:CHFile(@"IMG_0263.JPG")];
+    // tableView.layer.contents = (__bridge id)image.CGImage;
 
-    [self tryCatchShowBallonFly];
-    flyTimer = [NSTimer scheduledTimerWithTimeInterval:animatedTime target:self selector:@selector(tryCatchShowBallonFly) userInfo:nil repeats:YES];
+    // [self tryCatchShowBallonFly];
+    // flyTimer = [NSTimer scheduledTimerWithTimeInterval:animatedTime target:self selector:@selector(tryCatchShowBallonFly) userInfo:nil repeats:YES];
 
     %orig;
     
@@ -32,8 +32,8 @@ static CGFloat animatedTime = 2.0;
 
 - (void)viewWillDisappear:(BOOL)animated{
     %orig;
-    [flyTimer invalidate];
-    flyTimer = nil;
+    // [flyTimer invalidate];
+    // flyTimer = nil;
 
 }
 

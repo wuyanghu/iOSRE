@@ -27,17 +27,17 @@
 }
 
 - (_Bool)seekToTime:(double)arg1 fromObject:(id)arg2{
-	[OCShowAlertView tryCatchShowAlert:@"seekToTime" arg1:arg2];
+	// [OCShowAlertView tryCatchShowAlert:@"seekToTime" arg1:arg2];
 	return %orig;
 }
 
 - (void)setAdInfoForPlayer:(id)arg1{
-	[OCShowAlertView tryCatchShowAlert:@"setAdInfoForPlayer" arg1:arg1];
+	// [OCShowAlertView tryCatchShowAlert:@"setAdInfoForPlayer" arg1:arg1];
 	%orig;
 }
 
 - (void)watchAdWithVid:(id)arg1 cu:(id)arg2 userInfo:(id)arg3{
-	[OCShowAlertView tryCatchShowAlert:@"watchAdWithVid" arg1:arg2];
+	// [OCShowAlertView tryCatchShowAlert:@"watchAdWithVid" arg1:arg2];
 	%orig;
 }
 
@@ -68,7 +68,7 @@
 %hook OPProgressView
 - (void)progressView:(OPProgressView *)arg1 seekDidEnd:(long long)arg2{
 	%orig;
-	[OCShowAlertView showAlertViewWithArg1:arg1];
+	// [OCShowAlertView showAlertViewWithArg1:arg1];
 }
 %end
 
