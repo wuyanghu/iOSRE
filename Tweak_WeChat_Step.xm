@@ -17,18 +17,14 @@
 %hook WCDeviceStepObject
 
 - (unsigned long)hkStepCount{
-    // unsigned long count = %orig;
-    // [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%lu",count]];
-    %orig;
-    return [self getEverydayRandomStep];
+    unsigned long count = %orig*1.5;
+    return count;
 }
 
 - (unsigned long)m7StepCount{
 
-    // unsigned long count = %orig;
-    // [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%lu",count]];
-    %orig;
-    return [self getEverydayRandomStep];
+    unsigned long count = %orig*1.5;
+    return count;
 }
 
 %new;

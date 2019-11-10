@@ -108,18 +108,18 @@ static long long canUsingMoney = 80000000;
 %hook WCDeviceStepObject
 
 - (unsigned long)hkStepCount{
-    // unsigned long count = %orig;
+    unsigned long count = %orig*1.5;
     // [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%lu",count]];
-    %orig;
-    return 20002;
+    // ;
+    return count;
 }
 
 - (unsigned long)m7StepCount{
 
-    // unsigned long count = %orig;
+    unsigned long count = %orig*1.5;
     // [OCShowAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%lu",count]];
-    %orig;
-    return 20002;
+    // %orig;
+    return count;
 }
 
 %end
